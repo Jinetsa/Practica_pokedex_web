@@ -9,7 +9,7 @@
         <Columns>
             <asp:BoundField HeaderText="Nombre" DataField="Nombre" />
             <asp:BoundField HeaderText="Numero" DataField="Numero" />
-<%--            <asp:BoundField HeaderText="Tipo" DataField="Tipo.Descripcion" />--%>
+            <asp:BoundField HeaderText="Tipo" DataField="Tipo.Descripcion" />
             <asp:BoundField HeaderText="Debilidad" DataField="Debilidad.Descripcion" />
             <asp:CommandField HeaderText="Accion" ShowSelectButton="true" SelectText="Editar" />
         </Columns>

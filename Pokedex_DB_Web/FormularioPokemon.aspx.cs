@@ -16,6 +16,7 @@ namespace Pokedex_DB_Web
             txtId.Enabled = false;
             try
             {
+                //Configuracion inicial de la pantalla
                 if (!IsPostBack)
                 {
                     ElementoNegocio negocio = new ElementoNegocio();
@@ -32,6 +33,27 @@ namespace Pokedex_DB_Web
                     ddlDebilidad.DataBind();
 
                 }
+
+                //configuracion si estamos modificando
+                string id = Request.QueryString["id"] != null ? Request.QueryString["id"].ToString() : "";
+                if (id != "" && !IsPostBack)
+                {
+                    PokemonNegocio negocio = new PokemonNegocio();
+                    //List<Pokemon> lista = negocio.listar();
+                    //Pokemon seleccionado = lista[0];
+                    Pokemon seleccionado = (negocio.listar(id))[0];
+
+                    //Precarga de datos
+                    txtId.Text = id;
+                    txtNombre.Text = seleccionado.Nombre;
+                    txtDescripcion.Text = seleccionado.Descripcion;
+                    txtUrlImagen.Text = seleccionado.UrlImagen;
+                    txtNumero.Text = seleccionado.Numero.ToString();
+                    ddlDebilidad.SelectedValue = seleccionado.Debilidad.Id.ToString();
+                    ddlTipo.SelectedValue = seleccionado.Tipo.Id.ToString();
+                    txtUrlImagen_TextChanged(sender, e); //Esto pasarlo a metodo para que no quede tan desprolijo 
+                }
+
             }
             catch (Exception ex)
             {
@@ -59,7 +81,14 @@ namespace Pokedex_DB_Web
                 nuevo.Debilidad = new Elemento();
                 nuevo.Debilidad.Id = int.Parse(ddlDebilidad.SelectedValue);
 
-                negocio.agregarConSP(nuevo);
+                if (Request.QueryString["id"] != null)
+                {
+                    nuevo.Id = int.Parse(txtId.Text);
+                    negocio.modificarConSP(nuevo);
+                }
+                else
+                    negocio.agregarConSP(nuevo);
+
                 Response.Redirect("PokemonLista.aspx", false);
 
             }
